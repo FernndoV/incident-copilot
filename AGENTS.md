@@ -18,14 +18,19 @@ El desarrollo debe seguir las especificaciones almacenadas en `docs/specs/`.
 
 ## Arquitectura
 
-Organizar el código en capas claras:
+La feature 001 conserva su organización por capas para mantener el alcance
+controlado. Las nuevas features, empezando por la 002, deben usar arquitectura
+hexagonal:
 
-- `controller`: endpoints HTTP y códigos de respuesta.
-- `service`: casos de uso y reglas de negocio.
-- `repository`: acceso a datos.
-- `entity`: entidades persistentes.
-- `dto`: modelos de entrada y salida de la API.
+- `domain/model`: modelos y reglas sin dependencias de Spring, JPA ni MVC.
+- `domain/port/in`: casos de uso expuestos al exterior.
+- `domain/port/out`: puertos requeridos por la aplicación.
+- `application`: orquestación y casos de uso.
+- `adapter/in/web`: controladores, DTOs y traducción HTTP.
+- `adapter/out`: persistencia e implementaciones de agentes.
 
+El núcleo depende de puertos; los adaptadores dependen del núcleo. No exponer
+entidades JPA desde controladores ni acoplar el dominio a infraestructura.
 ## Reglas de desarrollo
 
 - La especificación funcional es la fuente de verdad.
@@ -62,3 +67,4 @@ Al finalizar una tarea, informar de:
 2. Especificación implementada.
 3. Tests ejecutados y resultado.
 4. Riesgos o decisiones pendientes.
+
